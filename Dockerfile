@@ -17,7 +17,7 @@ RUN apt-get update \
         mesa-utils libgl1-mesa-dri \
         lxde x11vnc xvfb \
         gtk2-engines-murrine gnome-themes-standard gtk2-engines-pixbuf gtk2-engines-murrine arc-theme \
-         chromium-browser \
+        chromium-browser \
         ttf-ubuntu-font-family ttf-wqy-zenhei \
     && add-apt-repository -r ppa:fcwu-tw/apps \
     && apt-get autoclean \
@@ -31,6 +31,9 @@ ARG TINI_VERSION=v0.9.0
 ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /bin/tini
 RUN chmod +x /bin/tini
 
+# ffmpeg
+RUN mkdir -p /usr/local/ffmpeg \
+    && curl -sSL https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-64bit-static.tar.xz | tar xJvf - -C /usr/local/ffmpeg/ --strip 1
 
 # python library
 COPY image/usr/local/lib/web/backend/requirements.txt /tmp/
@@ -38,6 +41,7 @@ RUN apt-get update \
     && dpkg-query -W -f='${Package}\n' > /tmp/a.txt \
     && apt-get install -y python-pip python-dev build-essential \
 	&& pip install setuptools wheel && pip install -r /tmp/requirements.txt \
+	&& apt-get install -y qflow \
     && dpkg-query -W -f='${Package}\n' > /tmp/b.txt \
     && apt-get remove -y `diff --changed-group-format='%>' --unchanged-group-format='' /tmp/a.txt /tmp/b.txt | xargs` \
     && apt-get autoclean -y \
@@ -78,12 +82,11 @@ RUN cd /src/web \
 # merge
 ################################################################################
 FROM system
-LABEL maintainer="mangesh@devopxy.com"
+LABEL maintainer="fcwu.tw@gmail.com"
 
 COPY --from=builder /src/web/dist/ /usr/local/lib/web/frontend/
 COPY image /
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends qflow
+
 EXPOSE 80
 WORKDIR /root
 ENV HOME=/home/ubuntu \
