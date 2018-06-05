@@ -17,7 +17,7 @@ RUN apt-get update \
         mesa-utils libgl1-mesa-dri \
         lxde x11vnc xvfb \
         gtk2-engines-murrine gnome-themes-standard gtk2-engines-pixbuf gtk2-engines-murrine arc-theme \
-        chromium-browser qflow \
+        firefox chromium-browser qflow \
         ttf-ubuntu-font-family ttf-wqy-zenhei \
     && add-apt-repository -r ppa:fcwu-tw/apps \
     && apt-get autoclean \
