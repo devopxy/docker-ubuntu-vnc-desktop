@@ -17,7 +17,7 @@ RUN apt-get update \
         mesa-utils libgl1-mesa-dri \
         lxde x11vnc xvfb \
         gtk2-engines-murrine gnome-themes-standard gtk2-engines-pixbuf gtk2-engines-murrine arc-theme \
-        firefox chromium-browser qflow \
+        firefox chromium-browser \
         ttf-ubuntu-font-family ttf-wqy-zenhei \
     && add-apt-repository -r ppa:fcwu-tw/apps \
     && apt-get autoclean \
@@ -81,11 +81,13 @@ RUN cd /src/web \
 # merge
 ################################################################################
 FROM system
-LABEL maintainer="fcwu.tw@gmail.com"
+LABEL maintainer="mangesh@devopxy.com"
 
 COPY --from=builder /src/web/dist/ /usr/local/lib/web/frontend/
 COPY image /
 
+RUN apt-get update \
+    && apt-get install -y qflow iverilog gtkwave irsim
 EXPOSE 80
 WORKDIR /root
 ENV HOME=/home/ubuntu \
