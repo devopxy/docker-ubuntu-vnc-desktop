@@ -24,7 +24,6 @@ RUN apt-get update \
     && apt-get autoremove \
     && rm -rf /var/lib/apt/lists/*
 # Additional packages require ~600MB
-#    && apt-get install -y qflow iverilog gtkwave irsim \ 
 # libreoffice  pinta language-pack-zh-hant language-pack-gnome-zh-hant firefox-locale-zh-hant libreoffice-l10n-zh-tw
 
 # tini for subreap                                   
